@@ -23,8 +23,8 @@ import javax.swing.JTextField;
 // Главный класс приложения, он же класс фрейма
 public class MainFrame extends JFrame {
     // Размеры окна приложения в виде констант
-    private static final int WIDTH = 800;
-    private static final int HEIGHT = 700;
+    private static final int WIDTH = 400;
+    private static final int HEIGHT = 320;
     // Текстовые поля для считывания значений переменных,
 // как компоненты, совместно используемые в различных методах
     private JTextField textFieldX;
@@ -38,12 +38,12 @@ public class MainFrame extends JFrame {
     private Box hboxFormulaType = Box.createHorizontalBox();
     private int formulaId = 1;
     // Формула №1 для рассчѐта
-    public Double calculate1(Double x, Double y) {
-        return x*x + y*y;
+    public Double calculate1(Double x, Double y,Double z) {
+        return Math.pow(Math.pow(Math.log(1 + x),2) + Math.cos(z*z*z*Math.PI),Math.sin(y)) +1/(Math.exp(x*x) + Math.cos(Math.exp(z)) + Math.sqrt(1/y));
     }
     // Формула №2 для рассчѐта
-    public Double calculate2(Double x, Double y) {
-        return x*x*x + 1/y;
+    public Double calculate2(Double x, Double y, Double z) {
+        return y*x*x/(Math.log(Math.pow(z,y)) + Math.pow(Math.cos(Math.cbrt(x)),2));
     }
     // Вспомогательный метод для добавления кнопок на панель
     private void addRadioButton(String buttonName, final int formulaId) {
@@ -113,9 +113,9 @@ public class MainFrame extends JFrame {
                     Double y = Double.parseDouble(textFieldY.getText());
                     Double result;
                     if (formulaId==1)
-                        result = calculate1(x, y);
+                        result = calculate1(x, y, z);
                     else
-                        result = calculate2(x, y);
+                        result = calculate2(x, y, z);
                     textFieldResult.setText(result.toString());
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(MainFrame.this,

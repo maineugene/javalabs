@@ -1,6 +1,8 @@
 package lab_1;
 
 public interface Consumable {
-    public void consume();
+    default void consume(){
+        System.out.println("gghghg");
+    }
 }
 
