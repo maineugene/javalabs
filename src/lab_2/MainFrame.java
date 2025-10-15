@@ -37,7 +37,11 @@ public class MainFrame extends JFrame {
     private ButtonGroup radioButtons = new ButtonGroup();
     // Контейнер для отображения радио-кнопок
     private Box hboxFormulaType = Box.createHorizontalBox();
+    Formula formula = new Formula();
     private int formulaId = 1;
+    //Кнопки памяти
+    private JButton buttonMC; // Memory Clear
+    private JButton buttonMPlus; // Memory Plus
 
     // Вспомогательный метод для добавления кнопок на панель
     private void addRadioButton(String buttonName, final int formulaId) {
@@ -136,6 +140,32 @@ public class MainFrame extends JFrame {
                 textFieldResult.setText("0");
             }
         });
+
+        buttonMC = new JButton("MC");
+        buttonMC.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ev) {
+                formula.cleanSum(); // Очищаем накопленную сумму
+                textFieldResult.setText("0");
+            }
+        });
+
+        buttonMPlus = new JButton("M+");
+        buttonMPlus.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ev) {
+                try {
+                    double currentResult = Double.parseDouble(textFieldResult.getText());
+                    formula.summariseResult(currentResult); // Добавляем к накопленной сумме
+                    textFieldResult.setText(String.valueOf(formula.getSum()));
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(MainFrame.this,
+                            "Нет результата для добавления в память",
+                            "Ошибка",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+
+
         Box hboxButtons = Box.createHorizontalBox();
         hboxButtons.add(Box.createHorizontalGlue());
         hboxButtons.add(buttonCalc);
@@ -144,6 +174,15 @@ public class MainFrame extends JFrame {
         hboxButtons.add(Box.createHorizontalGlue());
         hboxButtons.setBorder(
                 BorderFactory.createLineBorder(Color.GREEN));
+
+        Box hboxMemoryButtons = Box.createHorizontalBox();
+        hboxMemoryButtons.add(Box.createHorizontalGlue());
+        hboxMemoryButtons.add(buttonMC);
+        hboxMemoryButtons.add(Box.createHorizontalStrut(30));
+        hboxMemoryButtons.add(buttonMPlus);
+        hboxMemoryButtons.add(Box.createHorizontalGlue());
+        hboxMemoryButtons.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+
 // Связать области воедино в компоновке BoxLayout
         Box contentBox = Box.createVerticalBox();
         contentBox.add(Box.createVerticalGlue());
@@ -152,6 +191,13 @@ public class MainFrame extends JFrame {
         contentBox.add(hboxResult);
         contentBox.add(hboxButtons);
         contentBox.add(Box.createVerticalGlue());
+
+
+        contentBox.add(Box.createVerticalStrut(10)); // Отступ между группами кнопок
+        contentBox.add(hboxMemoryButtons);
+        contentBox.add(Box.createVerticalGlue());
+
+
         getContentPane().add(contentBox, BorderLayout.CENTER);
     }
     // Главный метод класса
