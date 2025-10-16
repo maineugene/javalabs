@@ -20,11 +20,11 @@ public class Formula {
         sum = 0.0;
     }
     // Формула №1 для рассчѐта
-    public static Double calculate1(Double x, Double y,Double z) {
+    public static Double calculate1(double x, double y,double z) {
         return Math.pow(Math.pow(Math.log(1 + x),2) + Math.cos(z*z*z*Math.PI),Math.sin(y)) +1/(Math.exp(x*x) + Math.cos(Math.exp(z)) + Math.sqrt(1/y));
     }
     // Формула №2 для рассчѐта
-    public static Double calculate2(Double x, Double y, Double z) {
+    public static Double calculate2(double x, double y, double z) {
         return y*x*x/(Math.log(Math.pow(z,y)) + Math.pow(Math.cos(Math.cbrt(x)),2));
     }
 }
