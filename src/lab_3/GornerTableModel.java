@@ -30,7 +30,7 @@ public class GornerTableModel extends AbstractTableModel {
     public int getRowCount() {
 // Вычислить количество точек между началом и концом отрезка
 // исходя из шага табулирования
-        return new Double(Math.ceil((to-from)/step)).intValue()+1;
+        return (int)Math.ceil((to-from)/step)+1;
     }
     public Object getValueAt(int row, int col) {
 // Вычислить значение X как НАЧАЛО_ОТРЕЗКА + ШАГ*НОМЕР_СТРОКИ
@@ -39,12 +39,12 @@ public class GornerTableModel extends AbstractTableModel {
 // Если запрашивается значение 1-го столбца, то это X
             return x;
         } else {
-// Если запрашивается значение 2-го столбца, то это значение
-// многочлена
-            Double result = 0.0;
-// Вычисление значения в точке по схеме Горнера.
-// Вспомнить 1-ый курс и реализовать
-// ...
+            Double result = coefficients[0];
+
+            // Схема Горнера: result = a0 + x*(a1 + x*(a2 + ... + x*(an-1 + x*an)...))
+            for (int i = 1; i < coefficients.length; i++) {
+                result = result * x + coefficients[i];
+            }
             return result;
         }
     }

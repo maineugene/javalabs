@@ -47,7 +47,7 @@ public class MainFrame extends JFrame {
     // Поля ввода для считывания значений переменных
     private JTextField textFieldFrom;
     private JTextField textFieldTo;
-    private JTextField textFieldStep;
+    private JTextField textFieldStep;        // ДОБАВЛЕНО: запуск в EDT для корректной работы Swing
     private Box hBoxResult;
     // Визуализатор ячеек таблицы
     private GornerTableCellRenderer renderer = new GornerTableCellRenderer();
@@ -112,11 +112,11 @@ public class MainFrame extends JFrame {
                 }
 // Показать диалоговое окно
                 if (fileChooser.showSaveDialog(MainFrame.this) ==
-                        JFileChooser.APPROVE_OPTION) ;
+                        JFileChooser.APPROVE_OPTION) {
 // Если результат его показа успешный,
 // сохранить данные в двоичный файл
                 saveToGraphicsFile(
-                        fileChooser.getSelectedFile());
+                        fileChooser.getSelectedFile());}
             }
         };
 // Добавить соответствующий пункт подменю в меню "Файл"
@@ -198,8 +198,8 @@ public class MainFrame extends JFrame {
 // Установить предпочтительный размер области равным удвоенному
 // минимальному, чтобы при компоновке область совсем не сдавили
         hboxRange.setPreferredSize(new Dimension(
-                new Double(hboxRange.getMaximumSize().getWidth()).intValue(),
-                new Double(hboxRange.getMinimumSize().getHeight()).intValue() * 2));
+                (int)hboxRange.getMaximumSize().getWidth(),
+                (int)hboxRange.getMinimumSize().getHeight() * 2));
 // Установить область в верхнюю (северную) часть компоновки
         getContentPane().add(hboxRange, BorderLayout.NORTH);
 // Создать кнопку "Вычислить"
@@ -274,9 +274,9 @@ public class MainFrame extends JFrame {
         hboxButtons.add(Box.createHorizontalGlue());
 // Установить предпочтительный размер области равным удвоенному минимальному, чтобы при
 // компоновке окна область совсем не сдавили
-        hboxButtons.setPreferredSize(new Dimension(new
-                Double(hboxButtons.getMaximumSize().getWidth()).intValue(), new
-                Double(hboxButtons.getMinimumSize().getHeight()).intValue() * 2));
+        hboxButtons.setPreferredSize(new Dimension(
+        (int)hboxButtons.getMaximumSize().getWidth(),
+        (int)hboxButtons.getMinimumSize().getHeight() * 2));
 // Разместить контейнер с кнопками в нижней (южной) области граничной компоновки
         getContentPane().add(hboxButtons, BorderLayout.SOUTH);
 // Область для вывода результата пока что пустая
