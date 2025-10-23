@@ -36,7 +36,7 @@ public class MainFrame extends JFrame {
     // Массив коэффициентов многочлена
     private Double[] coefficients;
     // Объект диалогового окна для выбора файлов
-// Компонент не создаѐтся изначально, т.к. может и не понадобиться
+// Компонент не создаѐтся изначtableReferenceально, т.к. может и не понадобиться
 // пользователю если тот не собирается сохранять данные в файл
     private JFileChooser fileChooser = null;
     // Элементы меню вынесены в поля данных класса, так как ими необходимо
@@ -44,6 +44,7 @@ public class MainFrame extends JFrame {
     private JMenuItem saveToTextMenuItem;
     private JMenuItem saveToGraphicsMenuItem;
     private JMenuItem searchValueMenuItem;
+    //private JMenuItem showReferenceMenuItem;
     // Поля ввода для считывания значений переменных
     private JTextField textFieldFrom;
     private JTextField textFieldTo;
@@ -77,6 +78,9 @@ public class MainFrame extends JFrame {
         JMenu tableMenu = new JMenu("Таблица");
 // Добавить его в главное меню
         menuBar.add(tableMenu);
+
+        JMenu helpMenu = new JMenu("Справка");
+        menuBar.add(helpMenu);
         // Создать новое "действие" по сохранению в текстовый файл
         Action saveToTextAction = new AbstractAction("Сохранить в текстовый файл") {
             public void actionPerformed(ActionEvent event) {
@@ -115,8 +119,9 @@ public class MainFrame extends JFrame {
                         JFileChooser.APPROVE_OPTION) {
 // Если результат его показа успешный,
 // сохранить данные в двоичный файл
-                saveToGraphicsFile(
-                        fileChooser.getSelectedFile());}
+                    saveToGraphicsFile(
+                            fileChooser.getSelectedFile());
+                }
             }
         };
 // Добавить соответствующий пункт подменю в меню "Файл"
@@ -140,6 +145,19 @@ public class MainFrame extends JFrame {
         searchValueMenuItem = tableMenu.add(searchValueAction);
 // По умолчанию пункт меню является недоступным (данных ещѐ нет)
         searchValueMenuItem.setEnabled(false);
+
+        Action showInformationAction = new AbstractAction("О программе") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Показ диалогового окна с информацией об авторе
+                JOptionPane.showMessageDialog(MainFrame.this,
+                        "Автор: Жуковский Евгений\nГруппа: 10",
+                        "О программе",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        };
+        JMenuItem aboutMenuItem = helpMenu.add(showInformationAction);
+
 // Создать область с полями ввода для границ отрезка и шага
 // Создать подпись для ввода левой границы отрезка
         JLabel labelForFrom = new JLabel("X изменяется на интервале от:");
@@ -198,8 +216,8 @@ public class MainFrame extends JFrame {
 // Установить предпочтительный размер области равным удвоенному
 // минимальному, чтобы при компоновке область совсем не сдавили
         hboxRange.setPreferredSize(new Dimension(
-                (int)hboxRange.getMaximumSize().getWidth(),
-                (int)hboxRange.getMinimumSize().getHeight() * 2));
+                (int) hboxRange.getMaximumSize().getWidth(),
+                (int) hboxRange.getMinimumSize().getHeight() * 2));
 // Установить область в верхнюю (северную) часть компоновки
         getContentPane().add(hboxRange, BorderLayout.NORTH);
 // Создать кнопку "Вычислить"
@@ -275,8 +293,8 @@ public class MainFrame extends JFrame {
 // Установить предпочтительный размер области равным удвоенному минимальному, чтобы при
 // компоновке окна область совсем не сдавили
         hboxButtons.setPreferredSize(new Dimension(
-        (int)hboxButtons.getMaximumSize().getWidth(),
-        (int)hboxButtons.getMinimumSize().getHeight() * 2));
+                (int) hboxButtons.getMaximumSize().getWidth(),
+                (int) hboxButtons.getMinimumSize().getHeight() * 2));
 // Разместить контейнер с кнопками в нижней (южной) области граничной компоновки
         getContentPane().add(hboxButtons, BorderLayout.SOUTH);
 // Область для вывода результата пока что пустая
