@@ -1,5 +1,4 @@
 package lab_3;
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
@@ -7,18 +6,18 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import javax.swing.JLabel;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
 public class GornerTableCellRenderer implements TableCellRenderer {
-    private JPanel panel = new JPanel();
-    private JLabel label = new JLabel();
-    // Ищем ячейки, строковое представление которых совпадает с needle
-// (иголкой). Применяется аналогия поиска иголки в стоге сена, в роли
-// стога сена - таблица
+    private final JPanel panel = new JPanel();
+    private final JLabel label = new JLabel();
+    private final JCheckBox checkBox = new JCheckBox();
+
     private String needle = null;
-    private DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance();
+    private final DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance();
 
     public GornerTableCellRenderer() {
 // Показывать только 5 знаков после запятой
@@ -35,26 +34,42 @@ public class GornerTableCellRenderer implements TableCellRenderer {
         dottedDouble.setDecimalSeparator('.');
         formatter.setDecimalFormatSymbols(dottedDouble);
 // Разместить надпись внутри панели
-        panel.add(label);
 // Установить выравнивание надписи по левому краю панели
         panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        // Добавляем и метку и чекбокс, но показывать будем только один из них
+        panel.add(label);
+        // Ищем ячейки, строковое представление которых совпадает с needle
+        // (иголкой). Применяется аналогия поиска иголки в стоге сена, в роли
+        // стога сена - таблица
+        panel.add(checkBox);
     }
 
     public Component getTableCellRendererComponent(JTable table,
                                                    Object value, boolean isSelected, boolean hasFocus, int row, int col) {
+        label.setVisible(false);
+        checkBox.setVisible(false);
+
+        if (col == 2){
+            checkBox.setSelected((Boolean)value);
+            checkBox.setVisible(true);
+            checkBox.setEnabled(false);
+            panel.setBackground(isSelected ? table.getSelectionBackground() : Color.WHITE);
+        } else {
+            String formattedDouble = formatter.format(value);
+            label.setText(formattedDouble);
+            label.setVisible(true);
 // Преобразовать double в строку с помощью форматировщика
-        String formattedDouble = formatter.format(value);
 // Установить текст надписи равным строковому представлению числа
-        label.setText(formattedDouble);
-        if (col == 1 && needle != null && needle.equals(formattedDouble)) {
 // Номер столбца = 1 (т.е. второй столбец) + иголка не null
 // (значит что-то ищем) +
 // значение иголки совпадает со значением ячейки таблицы -
 // окрасить задний фон панели в красный цвет
-            panel.setBackground(Color.RED);
-        } else {
 // Иначе - в обычный белый
-            panel.setBackground(Color.WHITE);
+            if (col == 1 && needle != null && needle.equals(formattedDouble)) {
+                panel.setBackground(Color.RED);
+            } else {
+                panel.setBackground(isSelected ? table.getSelectionBackground() : Color.WHITE);
+            }
         }
         return panel;
     }

@@ -1,4 +1,9 @@
 package lab_3;
+//6 вариант
+/*Добавить в модель таблицы третий столбец «Близко к целому», содержащий
+булевские значения и принимающий значение true, если значение многочлена в
+точке находится в пределах 0.1 от целого числа, и false – в противном случае.
+Обеспечить отображение значений третьего столбца как флажков.*/
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -34,24 +39,24 @@ public class MainFrame extends JFrame {
     private static final int WIDTH = 700;
     private static final int HEIGHT = 500;
     // Массив коэффициентов многочлена
-    private Double[] coefficients;
+    private final Double[] coefficients;
     // Объект диалогового окна для выбора файлов
 // Компонент не создаѐтся изначtableReferenceально, т.к. может и не понадобиться
 // пользователю если тот не собирается сохранять данные в файл
     private JFileChooser fileChooser = null;
     // Элементы меню вынесены в поля данных класса, так как ими необходимо
 // манипулировать из разных мест
-    private JMenuItem saveToTextMenuItem;
-    private JMenuItem saveToGraphicsMenuItem;
-    private JMenuItem searchValueMenuItem;
+    private final JMenuItem saveToTextMenuItem;
+    private final JMenuItem saveToGraphicsMenuItem;
+    private final JMenuItem searchValueMenuItem;
     //private JMenuItem showReferenceMenuItem;
     // Поля ввода для считывания значений переменных
-    private JTextField textFieldFrom;
-    private JTextField textFieldTo;
-    private JTextField textFieldStep;        // ДОБАВЛЕНО: запуск в EDT для корректной работы Swing
-    private Box hBoxResult;
+    private final JTextField textFieldFrom;
+    private final JTextField textFieldTo;
+    private final JTextField textFieldStep;        // ДОБАВЛЕНО: запуск в EDT для корректной работы Swing
+    private final Box hBoxResult;
     // Визуализатор ячеек таблицы
-    private GornerTableCellRenderer renderer = new GornerTableCellRenderer();
+    private final GornerTableCellRenderer renderer = new GornerTableCellRenderer();
     // Модель данных с результатами вычислений
     private GornerTableModel data;
 
@@ -241,6 +246,8 @@ public class MainFrame extends JFrame {
 // Установить в качестве визуализатора ячеек для класса Double разработанный визуализатор
                     table.setDefaultRenderer(Double.class,
                             renderer);
+                    //ДОБАВИЛИ РЕНДЕРЕР ДЛЯ 3 СТОЛБЦА
+                    table.setDefaultRenderer(Boolean.class, renderer);
 // Установить размер строки таблицы в 30 пикселов
                     table.setRowHeight(30);
 // Удалить все вложенные элементы из контейнера hBoxResult
