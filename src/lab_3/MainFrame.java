@@ -4,7 +4,7 @@ package lab_3;
 булевские значения и принимающий значение true, если значение многочлена в
 точке находится в пределах 0.1 от целого числа, и false – в противном случае.
 Обеспечить отображение значений третьего столбца как флажков.*/
-
+import javax.swing.SwingUtilities;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -366,7 +366,6 @@ public class MainFrame extends JFrame {
             System.out.println("Невозможно табулировать многочлен, для которого не задано ни одного коэффициента!");
             System.exit(-1);
         }
-// Зарезервировать места в массиве коэффициентов столько, сколько аргументов командной строки
         Double[] coefficients = new Double[args.length];
         int i = 0;
         try {
@@ -377,13 +376,21 @@ public class MainFrame extends JFrame {
         } catch (NumberFormatException ex) {
 // Если преобразование невозможно - сообщить об ошибке и завершиться
             System.out.println("Ошибка преобразования строки '" +
-                    args[i] + "' в число типа Double");
+                    args[i - 1] + "' в число типа Double");
             System.exit(-2);
         }
+        SwingUtilities.invokeLater(() -> {
+            try {
 // Создать экземпляр главного окна, передав ему коэффициенты
-        MainFrame frame = new MainFrame(coefficients);
+                MainFrame frame = new MainFrame(coefficients);
 // Задать действие, выполняемое при закрытии окна
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setVisible(true);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null,
+                        "Неожиданная ошибка при создании интерфейса: " + ex.getMessage(),
+                        "Ошибка приложения", JOptionPane.ERROR_MESSAGE);
+            }
+        });
     }
 }
