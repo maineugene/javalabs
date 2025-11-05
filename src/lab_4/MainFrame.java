@@ -26,10 +26,10 @@ public class MainFrame extends JFrame {
     // Объект диалогового окна для выбора файлов
     private JFileChooser fileChooser = null;
     // Пункты меню
-    private JCheckBoxMenuItem showAxisMenuItem;
-    private JCheckBoxMenuItem showMarkersMenuItem;
+    private final JCheckBoxMenuItem showAxisMenuItem;
+    private final JCheckBoxMenuItem showMarkersMenuItem;
     // Компонент-отображатель графика
-    private GraphicsDisplay display = new GraphicsDisplay();
+    private final GraphicsDisplay display = new GraphicsDisplay();
 
     // Флаг, указывающий на загруженность данных графика
     private boolean fileLoaded = false;
