@@ -34,20 +34,20 @@ public class GraphicsDisplay extends JPanel {
     private final BasicStroke axisStroke;
     private final BasicStroke markerStroke;
     // Различные шрифты отображения надписей
-    private Font axisFont;
+    private final Font axisFont;
 
     public GraphicsDisplay() {
 // Цвет заднего фона области отображения - белый
         setBackground(Color.WHITE);
 // Сконструировать необходимые объекты, используемые в рисовании
 // Перо для рисования графика
-        graphicsStroke = new BasicStroke(2.0f, BasicStroke.CAP_BUTT,
+        graphicsStroke = new BasicStroke(2.0f, BasicStroke.CAP_BUTT, //changed width
                 BasicStroke.JOIN_ROUND, 10.0f, new float[] {3, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 3}, 0.0f);
 // Перо для рисования осей координат
         axisStroke = new BasicStroke(2.0f, BasicStroke.CAP_BUTT,
                 BasicStroke.JOIN_MITER, 10.0f, null, 0.0f);
 // Перо для рисования контуров маркеров
-        markerStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT,
+        markerStroke = new BasicStroke(2.0f, BasicStroke.CAP_BUTT,
                 BasicStroke.JOIN_MITER, 10.0f, null, 0.0f);
 // Шрифт для подписей осей координат
     axisFont = new Font("Serif", Font.BOLD, 36);
@@ -185,30 +185,44 @@ minY
 
     // Отображение маркеров точек, по которым рисовался график
     protected void paintMarkers(Graphics2D canvas) {
+        Stroke originalStroke = canvas.getStroke();
+        Color originalColor = canvas.getColor();
 // Шаг 1 - Установить специальное перо для черчения контуров маркеров
         canvas.setStroke(markerStroke);
-// Выбрать красный цвета для контуров маркеров
+// Выбрать черный цвета для контуров маркеров
         canvas.setColor(Color.BLACK);
-// Выбрать красный цвет для закрашивания маркеров внутри
+// Выбрать черный цвет для закрашивания маркеров внутри
         canvas.setPaint(Color.BLACK);
+        final int markerSize = 11;
+        final double radius = (double)markerSize / 2;
+        final double crossSize = radius - 2;
 // Шаг 2 - Организовать цикл по всем точкам графика
         for (Double[] point : graphicsData) {
-// Инициализировать эллипс как объект для представления маркера
-            Ellipse2D.Double marker = new Ellipse2D.Double();
-/* Эллипс будет задаваться посредством указания координат
-его центра
-и угла прямоугольника, в который он вписан */
-// Центр - в точке (x,y)
             Point2D.Double center = xyToPoint(point[0], point[1]);
-// Угол прямоугольника - отстоит на расстоянии (3,3)
-            Point2D.Double corner = shiftPoint(center, 3, 3);
-// Задать эллипс по центру и диагонали
-            marker.setFrameFromCenter(center, corner);
-            canvas.draw(marker);
-// Начертить контур маркера
-            canvas.fill(marker);
-// Залить внутреннюю область маркера
+// Инициализировать эллипс как объект для представления маркера
+            Point2D.Double marker = xyToPoint(point[0], point[1]);
+            Ellipse2D.Double circle = new Ellipse2D.Double(
+                    center.getX() - radius,
+                    center.getY() - radius,
+                    markerSize,
+                    markerSize
+            );
+            canvas.draw(circle);
+            canvas.draw(new Line2D.Double(
+                    center.getX(),
+                    center.getY() - crossSize,
+                    center.getX(),
+                    center.getY() + crossSize
+            ));
+            canvas.draw(new Line2D.Double(
+                    center.getX() - crossSize,
+                    center.getY(),
+                    center.getX() + crossSize,
+                    center.getY()
+            ));
         }
+        canvas.setStroke(originalStroke);
+        canvas.setColor(originalColor);
     }
 
     // Метод, обеспечивающий отображение осей координат
