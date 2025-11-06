@@ -16,6 +16,12 @@ public class CreateBinaryFile {
                 out.writeDouble(y);
                 System.out.println("Точка: (" + x + ", " + y + ")");
             }
+            out.writeDouble(7);
+            out.writeDouble(3);
+            out.writeDouble(10);
+            out.writeDouble(3);
+
+
 
             System.out.println("Файл " + filename + " создан успешно!");
             System.out.println("Размер файла: " + new File(filename).length() + " байт");

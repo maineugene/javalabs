@@ -199,6 +199,13 @@ minY
 // Шаг 2 - Организовать цикл по всем точкам графика
         for (Double[] point : graphicsData) {
             Point2D.Double center = xyToPoint(point[0], point[1]);
+            if (hasOnlyEvenDigits(point[1])){
+                canvas.setStroke(new BasicStroke(2.0f));
+                canvas.setColor(Color.BLUE);
+            } else{
+                canvas.setStroke(markerStroke);
+                canvas.setColor(Color.BLACK);
+            }
 // Инициализировать эллипс как объект для представления маркера
             Point2D.Double marker = xyToPoint(point[0], point[1]);
             Ellipse2D.Double circle = new Ellipse2D.Double(
@@ -325,5 +332,16 @@ minY
 // Задать еѐ координаты как координаты существующей точки +заданные смещения
         dest.setLocation(src.getX() + deltaX, src.getY() + deltaY);
         return dest;
+    }
+
+    public boolean hasOnlyEvenDigits(double value){
+        int number = (int) Math.abs(value);
+        if (number == 0) return true;
+        while (number > 0){
+            int lastDigit = number % 10;
+            if (lastDigit % 2 != 0) return false;
+            number /= 10;
+        }
+        return true;
     }
 }
