@@ -3,7 +3,8 @@ import java.io.*;
 
 public class CreateBinaryFile {
     public static void main(String[] args) {
-        String filename = "data.bin";
+        String filename = args[0];
+
 
         try (DataOutputStream out = new DataOutputStream(
                 new FileOutputStream(filename))) {
@@ -20,8 +21,6 @@ public class CreateBinaryFile {
             out.writeDouble(3);
             out.writeDouble(10);
             out.writeDouble(3);
-
-
 
             System.out.println("Файл " + filename + " создан успешно!");
             System.out.println("Размер файла: " + new File(filename).length() + " байт");

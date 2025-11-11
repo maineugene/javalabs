@@ -193,9 +193,7 @@ minY
         canvas.setColor(Color.BLACK);
 // Выбрать черный цвет для закрашивания маркеров внутри
         canvas.setPaint(Color.BLACK);
-        final int markerSize = 11;
-        final double radius = (double)markerSize / 2;
-        final double crossSize = radius - 2;
+
 // Шаг 2 - Организовать цикл по всем точкам графика
         for (Double[] point : graphicsData) {
             Point2D.Double center = xyToPoint(point[0], point[1]);
@@ -207,31 +205,38 @@ minY
                 canvas.setColor(Color.BLACK);
             }
 // Инициализировать эллипс как объект для представления маркера
-            Point2D.Double marker = xyToPoint(point[0], point[1]);
-            Ellipse2D.Double circle = new Ellipse2D.Double(
-                    center.getX() - radius,
-                    center.getY() - radius,
-                    markerSize,
-                    markerSize
-            );
-            canvas.draw(circle);
-            canvas.draw(new Line2D.Double(
-                    center.getX(),
-                    center.getY() - crossSize,
-                    center.getX(),
-                    center.getY() + crossSize
-            ));
-            canvas.draw(new Line2D.Double(
-                    center.getX() - crossSize,
-                    center.getY(),
-                    center.getX() + crossSize,
-                    center.getY()
-            ));
+            drawMarkers(canvas, point);
         }
         canvas.setStroke(originalStroke);
         canvas.setColor(originalColor);
     }
 
+    protected void drawMarkers(Graphics2D canvas, Double[] point){
+        final double markerSize = 11.0;
+        final double radius = markerSize / 2.0;
+        final double crossSize = radius - 2.0;
+
+        Point2D.Double center = xyToPoint(point[0], point[1]);
+        Ellipse2D.Double circle = new Ellipse2D.Double(
+                center.getX() - radius,
+                center.getY() - radius,
+                markerSize,
+                markerSize
+        );
+        canvas.draw(circle);
+        canvas.draw(new Line2D.Double(
+                center.getX(),
+                center.getY() - crossSize,
+                center.getX(),
+                center.getY() + crossSize
+        ));
+        canvas.draw(new Line2D.Double(
+                center.getX() - crossSize,
+                center.getY(),
+                center.getX() + crossSize,
+                center.getY()
+        ));
+    }
     // Метод, обеспечивающий отображение осей координат
     protected void paintAxis(Graphics2D canvas) {
 // Установить особое начертание для осей
@@ -336,8 +341,7 @@ minY
 
     public boolean hasOnlyEvenDigits(double value){
         int number = (int) Math.abs(value);
-        if (number == 0) return true;
-        while (number > 0){
+        while (number > 0) {
             int lastDigit = number % 10;
             if (lastDigit % 2 != 0) return false;
             number /= 10;
@@ -345,3 +349,5 @@ minY
         return true;
     }
 }
+
+//нужно добавить метод для отрисовки маркера

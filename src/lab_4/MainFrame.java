@@ -99,10 +99,10 @@ public class MainFrame extends JFrame {
 
     // Считывание данных графика из существующего файла
     protected void openGraphics(File selectedFile) {
-        try {
+        try (DataInputStream in = new DataInputStream(new
+                FileInputStream(selectedFile))) {
 // Шаг 1 - Открыть поток чтения данных, связанный с входным файловым потоком
-            DataInputStream in = new DataInputStream(new
-                    FileInputStream(selectedFile));
+
 /* Шаг 2 - Зная объѐм данных в потоке ввода можно вычислить,
 * сколько памяти нужно зарезервировать в массиве:
 * Всего байт в потоке - in.available() байт;
@@ -117,9 +117,9 @@ Double.SIZE/8 байт;
             int i = 0;
             while (in.available() > 0) {
 // Первой из потока читается координата точки X
-                Double x = in.readDouble();
+                double x = in.readDouble();
 // Затем - значение графика Y в точке X
-                Double y = in.readDouble();
+                double y = in.readDouble();
 // Прочитанная пара координат добавляется в массив
                 graphicsData[i++] = new Double[]{x, y};
             }
@@ -130,8 +130,6 @@ Double.SIZE/8 байт;
 // Вызывать метод отображения графика
                 display.showGraphics(graphicsData);
             }
-// Шаг 5 - Закрыть входной поток
-            in.close();
         } catch (FileNotFoundException ex) {
 // В случае исключительной ситуации типа "Файл не найден" показать сообщение об ошибке
             JOptionPane.showMessageDialog(MainFrame.this, "Указанный файл не найден", "Ошибка загрузки данных", JOptionPane.WARNING_MESSAGE);
