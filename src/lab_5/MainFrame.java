@@ -1,4 +1,5 @@
-package  lab_5;
+package lab_5;
+
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.io.DataInputStream;
@@ -32,14 +33,16 @@ public class MainFrame extends JFrame {
         JMenuBar menuBar = new JMenuBar();
         this.setJMenuBar(menuBar);
         JMenu fileMenu = new JMenu("Файл");
+        JMenu notesMenu = new JMenu("Заметки");
         menuBar.add(fileMenu);
+        menuBar.add(notesMenu);
+
         Action openGraphicsAction = new AbstractAction("Открыть файл с графиком") {
             public void actionPerformed(ActionEvent event) {
                 if (MainFrame.this.fileChooser == null) {
                     MainFrame.this.fileChooser = new JFileChooser();
                     MainFrame.this.fileChooser.setCurrentDirectory(new File("."));
                 }
-
                 MainFrame.this.fileChooser.showOpenDialog(MainFrame.this);
                 MainFrame.this.openGraphics(MainFrame.this.fileChooser.getSelectedFile());
             }
@@ -53,14 +56,25 @@ public class MainFrame extends JFrame {
         this.resetGraphicsMenuItem = fileMenu.add(resetGraphicsAction);
         this.resetGraphicsMenuItem.setEnabled(false);
         this.getContentPane().add(this.display, "Center");
+
+        Action newNoteAction = new AbstractAction("Добавить заметку"){
+            public void actionPerformed(ActionEvent event){
+                createNewNoteWindow();
+            }
+        };
+        notesMenu.add(newNoteAction);
+        this.getContentPane().add(this.display, "Center");
+    }
+
+    private void createNewNoteWindow(){
+        NoteWindow noteWindow = new NoteWindow(this);
+        noteWindow.setVisible(true);
     }
 
     protected void openGraphics(File selectedFile) {
-        try {
-            DataInputStream in = new DataInputStream(new FileInputStream(selectedFile));
+        try (DataInputStream in = new DataInputStream(new FileInputStream(selectedFile))) {
             ArrayList graphicsData = new ArrayList(50);
-
-            while(in.available() > 0) {
+            while (in.available() > 0) {
                 double x = in.readDouble();
                 double y = in.readDouble();
                 graphicsData.add(new Double[]{x, y});
@@ -84,4 +98,5 @@ public class MainFrame extends JFrame {
         frame.setDefaultCloseOperation(3);
         frame.setVisible(true);
     }
+
 }
